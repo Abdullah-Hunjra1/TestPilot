@@ -8,6 +8,7 @@ import { Card, CardContent } from '../ui/card'
 import EmptyWorkspace from './EmptyWorkspace'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import RepoDialog from './RepoDialog'
 
 function WorkspaceBody() {
 
@@ -42,10 +43,10 @@ function WorkspaceBody() {
                     <Image src={'/github.png'} alt='github' width={40} height={40} />
                     <h2 className=' text-lg'>Connect Github & Add Repository</h2>
                 </div>
-                {/* <div>
-                    {!token?<Button onClick={OnAddRepo}>Setup</Button> : 
-                    <Button>+ Add Repo</Button> }
-                </div> */}
+                <div>
+                    {!token ? <Button onClick={OnAddRepo}>Setup</Button> :
+                        <RepoDialog setRefreshPage={(refresh: boolean) => console.log(refresh)} />}
+                </div>
             </Card>
 
             <Card className=' mt-10'>

@@ -1,4 +1,3 @@
-import { date } from "drizzle-orm/mysql-core";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -22,8 +21,24 @@ export async function GET(req: NextRequest) {
         })
     })
 
-    const data = await res.json()
-    const token = data.access_token
+    // const data = await res.json()
+    // const token = data.access_token
+
+    const data = await res.json();
+
+    if (!res.ok || !data.access_token) {
+        console.error("GitHub token exchange failed:", {
+            status: res.status,
+            error: data.error,
+            error_description: data.error_description,
+        });
+
+        return NextResponse.redirect(
+            new URL("/workspace?error=token_exchange_failed", req.url)
+        );
+    }
+
+    const token: string = data.access_token;
 
     if (!token) {
         return NextResponse.redirect(new URL("/workspace?error=token_exchange-failed", req.url))

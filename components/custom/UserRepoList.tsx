@@ -11,22 +11,48 @@ import { CheckCircle2, ListChecks, Loader2, Sparkles, TrendingUp, XCircle } from
 import { Button } from '../ui/button'
 import axios from 'axios'
 import { UserDetailContext } from '@/context/UserDetailContext'
+import TestCaseList from './TestCaseList'
 
 type props = {
     repoList: UserRepo[]
 }
 
+export type TestCase = {
+    id: number
+    repoId: number
+    title: string
+    description: string
+    expectedResult: string
+    type: string
+    targetFiles: string[]
+    targetRoute: string
+    repoName: string
+    repoOwner: string
+}
+
+type StatusData = {
+    totalTests: number
+    passedTests: number
+    failedTests: number
+    passRate: number
+}
+
 
 const UserRepoList = ({ repoList }: props) => {
-    const totalTests = 0
-    const passedTests = 0
-    const failedTests = 0
-    const passRate = totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0
+
+    const [statusData, setStatusData] = useState<StatusData>({
+        totalTests: 0,
+        passedTests: 0,
+        failedTests: 0,
+        passRate: 0
+    });
 
     const { userDetail } = useContext(UserDetailContext) as {
         userDetail?: { id?: string }
     }
     const [loading, setLoading] = useState(false)
+    const [testCaseLoading, setTestCaseLoading] = useState(false)
+    const [testCases, setTestCases] = useState<TestCase[]>([])
 
 
     const handleGenerateTestCases = async (repo: UserRepo) => {
@@ -42,12 +68,28 @@ const UserRepoList = ({ repoList }: props) => {
         console.log(result.data)
         setLoading(false)
     }
+
+    const GetTestCases = async (repoId: number) => {
+        setTestCaseLoading(true)
+        setTestCases([])
+        const result = await axios.get(`/api/test-cases?repoId=${repoId}`)
+        console.log(result.data)
+        setStatusData({
+            totalTests: result.data.length,
+            passedTests: 0,
+            failedTests: 0,
+            passRate: 0
+        })
+        setTestCases(result.data)
+        setTestCaseLoading(false)
+    }
     return (
         <div className='mt-10'>
             <h2 className=' my-3 font-medium'>My Repositories</h2>
-            {repoList.map((repo) => (
-                <Accordion defaultValue={["item-1"]}>
-                    <AccordionItem value="item-1" className=' border px-5 rounded-xl'>
+            <Accordion onValueChange={(value) => GetTestCases(Number(value))}>
+
+                {repoList.map((repo, index) => (
+                    <AccordionItem value={(repo.repoId)} className=' border px-5 rounded-xl'>
                         <AccordionTrigger>
                             <div className='flex items-center gap-5'>
                                 <Image src={'/github.png'} alt="github" width={30} height={30} />
@@ -63,51 +105,58 @@ const UserRepoList = ({ repoList }: props) => {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                                     <StatusCard
                                         title="Total Tests"
-                                        value={totalTests}
+                                        value={statusData?.totalTests}
                                         icon={<ListChecks className="h-5 w-5 text-blue-600" />}
                                         bgColor="bg-blue-50"
                                     />
 
                                     <StatusCard
                                         title="Passed"
-                                        value={passedTests}
+                                        value={statusData?.passedTests}
                                         icon={<CheckCircle2 className="h-5 w-5 text-green-600" />}
                                         bgColor="bg-green-50"
                                     />
 
                                     <StatusCard
                                         title="Failed"
-                                        value={failedTests}
+                                        value={statusData?.failedTests}
                                         icon={<XCircle className="h-5 w-5 text-red-600" />}
                                         bgColor="bg-red-50"
                                     />
 
                                     <StatusCard
                                         title="Pass Rate"
-                                        value={`${passRate}%`}
+                                        value={`${statusData?.passRate}%`}
                                         icon={<TrendingUp className="h-5 w-5 text-purple-600" />}
                                         bgColor="bg-purple-50"
                                     />
                                 </div>
 
-                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gray-50 p-4 rounded-xl">
-                                    <div>
-                                        <h3 className="font-medium">{loading ? "Generating Test Cases..." : "Generate AI Test Cases" }</h3>
-                                        <p className="text-sm text-gray-500 mt-1">
-                                            Analyze this repository and generate automated test cases using AI.
-                                        </p>
-                                    </div>
+                                {!testCaseLoading && testCases.length > 0
+                                    && <TestCaseList testCases={testCases} onReload={(repoId: number) => GetTestCases(repoId)} />}
 
-                                    <Button disabled={loading} className="gap-2" onClick={() => handleGenerateTestCases(repo)}>
-                                        {loading ? <Loader2 className=' animate-spin' /> : <Sparkles className="h-4 w-4" />}
-                                        Generate Test Cases
-                                    </Button>
-                                </div>
+                                {testCaseLoading ? <h2 className=' flex gap-3 items-center'> <Loader2 className=' animate-spin' /> Please wait...</h2>
+                                    :
+                                    testCases?.length === 0 &&
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gray-50 p-4 rounded-xl">
+                                        <div>
+                                            <h3 className="font-medium">{loading ? "Generating Test Cases..." : "Generate AI Test Cases"}</h3>
+                                            <p className="text-sm text-gray-500 mt-1">
+                                                Analyze this repository and generate automated test cases using AI.
+                                            </p>
+                                        </div>
+
+                                        <Button disabled={loading} className="gap-2" onClick={() => handleGenerateTestCases(repo)}>
+                                            {loading ? <Loader2 className=' animate-spin' /> : <Sparkles className="h-4 w-4" />}
+                                            Generate Test Cases
+                                        </Button>
+                                    </div>}
                             </div>
                         </AccordionContent>
                     </AccordionItem>
-                </Accordion>
-            ))}
+                ))}
+            </Accordion>
+
         </div>
     )
 }

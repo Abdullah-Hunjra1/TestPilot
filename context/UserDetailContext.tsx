@@ -1,4 +1,4 @@
 import { createContext } from "react";
 
 
-export const UserDetailConext = createContext<any>(null)
+export const UserDetailContext = createContext<any>(null)

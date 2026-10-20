@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
-import { UserDetailConext } from '@/context/UserDetailContext';
+import { UserDetailContext } from '@/context/UserDetailContext';
 
 
 
@@ -25,11 +25,11 @@ const Provider = ({
     }, []);
 
     return (
-        <UserDetailConext.Provider value={{ userDetail, setUserDetail }}>
+        <UserDetailContext.Provider value={{ userDetail, setUserDetail }}>
             <div>
                 {children}
             </div>
-        </UserDetailConext.Provider>
+        </UserDetailContext.Provider>
     )
 
 }

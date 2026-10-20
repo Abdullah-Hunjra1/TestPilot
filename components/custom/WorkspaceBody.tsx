@@ -1,6 +1,6 @@
 'use client'
 
-import { UserDetailConext } from '@/context/UserDetailContext'
+import { UserDetailContext } from '@/context/UserDetailContext'
 import Image from 'next/image'
 import React, { useContext, useEffect, useState } from 'react'
 import { Button } from '../ui/button'
@@ -24,12 +24,14 @@ export type UserRepo = {
     userId: number,
     owner: string,
     language: string,
-    defaultBranch: string
+    defaultBranch: string,
+    targetDomain?: string,
+    globalInstruction?: string
 }
 function WorkspaceBody() {
 
 
-    const { userDetail } = useContext(UserDetailConext)
+    const { userDetail } = useContext(UserDetailContext)
     const router = useRouter()
     const [token, setToken] = useState('')
     const [userRepoList, setUserRepoList] = useState<UserRepo[]>([])
@@ -80,7 +82,7 @@ function WorkspaceBody() {
                 <CardContent>
                     <EmptyWorkspace />
                 </CardContent>
-            </Card> : <UserRepoList repoList={userRepoList} />}
+            </Card> : <UserRepoList repoList={userRepoList} setReload={() => GetUserAddedRepoList()} />}
 
         </div>
     )

@@ -12,7 +12,7 @@ import {
 import { Button } from '../ui/button'
 import axios from 'axios'
 import { Input } from '../ui/input'
-import { UserDetailConext } from '@/context/UserDetailContext'
+import { UserDetailContext } from '@/context/UserDetailContext'
 
 type Repo = {
     id: number,
@@ -32,7 +32,7 @@ const RepoDialog = ({setRefreshPage} : {setRefreshPage: (refresh: boolean) => vo
     const [repoList, setRepoList] = useState<Repo[]>([])
     const [selectedRepo, setSelectedRepo] = useState<Repo | null>(null)
     const [searchTerm, setSearchTerm] = useState('')
-    const { userDetail } = useContext(UserDetailConext)
+    const { userDetail } = useContext(UserDetailContext)
     const [isOpen, setIsOpen] = useState(false)
 
 

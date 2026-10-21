@@ -30,6 +30,7 @@ export type TestCase = {
     targetRoute: string
     repoName: string
     repoOwner: string
+    status: string
 }
 
 type StatusData = {
@@ -76,11 +77,17 @@ const UserRepoList = ({ repoList, setReload }: props) => {
         setTestCases([])
         const result = await axios.get(`/api/test-cases?repoId=${repoId}`)
         console.log(result.data)
+        const userTestCases = result.data as TestCase[]
+        const passedTests = userTestCases?.filter(testCase => testCase.status === 'Passed').length || 0;
+        const failedTests = userTestCases?.filter(testCase => testCase.status === 'Failed').length || 0;
+        const passRate = userTestCases?.length > 0 ? Math.round((passedTests / userTestCases.length) * 100) : 0;
+
+
         setStatusData({
             totalTests: result.data.length,
-            passedTests: 0,
-            failedTests: 0,
-            passRate: 0
+            passedTests: passedTests,
+            failedTests: failedTests,
+            passRate: passRate
         })
         setTestCases(result.data)
         setTestCaseLoading(false)

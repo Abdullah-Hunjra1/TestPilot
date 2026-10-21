@@ -42,9 +42,12 @@ const TestCaseList = ({ testCases, onReload }: Props) => {
               </div>
             </div>
 
-            <div className=' gap-4 flex'>
+            <div className=' gap-4 flex items-center'>
               <Badge variant={'secondary'}>{testCase?.type}</Badge>
-              <Badge variant={'secondary'}>Pending</Badge>
+              {testCase?.status == 'Passed' && <Badge variant={'default'} className=' text-green-200 font-normal bg-green-700'>{testCase?.status}</Badge>}
+              {testCase?.status == 'Failed' && <Badge variant={'destructive'} className=' text-red-200 font-normal'>{testCase?.status}</Badge>}
+              {testCase?.status == 'Running' && <Badge variant={'default'} className=' text-yellow-200 font-normal bg-yellow-700'>{testCase?.status}</Badge>}
+
               <TestCaseSettingDialog testCase={testCase} setReload={onReload}/>
               
 

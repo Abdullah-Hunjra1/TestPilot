@@ -27,7 +27,7 @@ type Repo = {
     owner: string
 }
 
-const RepoDialog = ({setRefreshPage} : {setRefreshPage: (refresh: boolean) => void}) => {
+const RepoDialog = ({ setRefreshPage }: { setRefreshPage: (refresh: boolean) => void }) => {
 
     const [repoList, setRepoList] = useState<Repo[]>([])
     const [selectedRepo, setSelectedRepo] = useState<Repo | null>(null)
@@ -76,7 +76,10 @@ const RepoDialog = ({setRefreshPage} : {setRefreshPage: (refresh: boolean) => vo
     }, [])
 
     const SaveRepoToDB = async () => {
-        if (!selectedRepo) return
+        if (!selectedRepo) {
+            console.log("Please select a repository first");
+            return
+        }
 
         const result = await axios.post('/api/user-repo', {
             repoId: selectedRepo.id,
@@ -112,10 +115,9 @@ const RepoDialog = ({setRefreshPage} : {setRefreshPage: (refresh: boolean) => vo
                     <Input placeholder='Search Repos by Name'
                         onChange={(event) => setSearchTerm(event.target.value)} />
                     {/* Repo list */}
-                    <ul className=' max-h-60 overflow-y-auto border rounded-xl mt-4'>
+                    <ul className='max-h-60 overflow-y-auto border rounded-xl mt-4'>
                         {filteredRepoList.map((repo) => (
-                            <li className={`p-4 border-b hover: bg-gray-100 cursor-pointer 
-                                ${selectedRepo?.id == repo.id ? 'bg-gray-100 ' : null}`}
+                            <li key={repo.id} className={`p-4 border-b hover:bg-gray-100 cursor-pointer ${selectedRepo?.id == repo.id ? 'bg-gray-100' : null}`}
                                 onClick={() => setSelectedRepo(repo)}>{repo.full_name}</li>
                         ))}
                     </ul>

@@ -15,7 +15,7 @@ export const repositories = pgTable("repositories", {
   name: text("name").notNull(),
   fullName: text("full_name").notNull(),
   private: integer("private").notNull(),
-  htmlUrl: integer("html_url").notNull(),
+  htmlUrl: text("html_url").notNull(),
   description: text("description"),
   owner: text("owner").notNull(),
   language: text("language"),

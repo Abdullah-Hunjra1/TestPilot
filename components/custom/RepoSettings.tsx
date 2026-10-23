@@ -41,8 +41,8 @@ const RepoSettings = ({repo, setReload}: props) => {
     }
     return (
         <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
-            <DialogTrigger>
-                <Button><Settings2 className=' h-4 w-4 mr-1' /> Project Config</Button>
+            <DialogTrigger render={<Button />}>
+                <Settings2 className=' h-4 w-4 mr-1' /> Project Config
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>

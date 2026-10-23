@@ -38,7 +38,6 @@ function WorkspaceBody() {
 
     const GetGithubUserToken = async () => {
         const result = await axios.get('/api/github/token')
-        console.log(result.data.token)
         setToken(result.data.token)
     }
 
@@ -48,7 +47,6 @@ function WorkspaceBody() {
 
     const GetUserAddedRepoList = async () => {
         const result = await axios.get(`/api/user-repo?userId=${userDetail?.id}`)
-        console.log(result.data)
         setUserRepoList(result.data)
     }
 

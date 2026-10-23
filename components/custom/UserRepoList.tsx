@@ -78,8 +78,8 @@ const UserRepoList = ({ repoList, setReload }: props) => {
         const result = await axios.get(`/api/test-cases?repoId=${repoId}`)
         console.log(result.data)
         const userTestCases = result.data as TestCase[]
-        const passedTests = userTestCases?.filter(testCase => testCase.status === 'Passed').length || 0;
-        const failedTests = userTestCases?.filter(testCase => testCase.status === 'Failed').length || 0;
+        const passedTests = userTestCases?.filter(testCase => testCase.status === 'passed').length || 0;
+        const failedTests = userTestCases?.filter(testCase => testCase.status === 'failed').length || 0;
         const passRate = userTestCases?.length > 0 ? Math.round((passedTests / userTestCases.length) * 100) : 0;
 
 
@@ -98,7 +98,7 @@ const UserRepoList = ({ repoList, setReload }: props) => {
             <Accordion onValueChange={(value) => GetTestCases(Number(value))}>
 
                 {repoList.map((repo, index) => (
-                    <AccordionItem value={(repo.repoId)} className=' border px-5 rounded-xl'>
+                    <AccordionItem key={repo.id} value={String(repo.repoId)} className=' border px-5 rounded-xl'>
                         <AccordionTrigger>
                             <div className='flex items-center gap-5'>
                                 <Image src={'/github.png'} alt="github" width={30} height={30} />
@@ -151,7 +151,7 @@ const UserRepoList = ({ repoList, setReload }: props) => {
                                 </div>
 
                                 {!testCaseLoading && testCases.length > 0
-                                    && <TestCaseList testCases={testCases} onReload={(repoId: number) => GetTestCases(repoId)} />}
+                                    && <TestCaseList testCases={testCases} onReload={(repoId: number) => GetTestCases(repoId)}  repository={repo}/>}
 
                                 {testCaseLoading ? <h2 className=' flex gap-3 items-center'> <Loader2 className=' animate-spin' /> Please wait...</h2>
                                     :

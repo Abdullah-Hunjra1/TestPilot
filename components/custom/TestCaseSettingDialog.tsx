@@ -48,56 +48,58 @@ const TestCaseSettingDialog = ({ testCase, setReload }: props) => {
 
     return (
         <Dialog>
-        <DialogTrigger>
-            <Button size={'icon'} variant={'outline'}>
-                <SettingsIcon className=' h-4 w-4' />
-            </Button>
-        </DialogTrigger>
-        <DialogContent>
-            <DialogHeader>
-                <DialogTitle>Edit Testing Requirements</DialogTitle>
-                <DialogDescription>
-                    Modifying these parameters automatically clears pre-generated scripts to ensure synchronization.
-                </DialogDescription>
-            </DialogHeader>
+            <DialogTrigger
+                render={
+                    <Button size="icon" variant="outline">
+                        <SettingsIcon className="h-4 w-4" />
+                    </Button>
+                }
+            />
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Edit Testing Requirements</DialogTitle>
+                    <DialogDescription>
+                        Modifying these parameters automatically clears pre-generated scripts to ensure synchronization.
+                    </DialogDescription>
+                </DialogHeader>
 
-            <div>
-                <div className=' mt-1'>
-                    <label className=' text-gray-500'>TEST TITLE</label>
-                    <Input
-                        value={formTestCase?.title}
-                        onChange={(event) => handleInputChange('title', event?.target?.value)}
-                        placeholder='Test Title' className=' mt-1' />
+                <div>
+                    <div className=' mt-1'>
+                        <label className=' text-gray-500'>TEST TITLE</label>
+                        <Input
+                            value={formTestCase?.title}
+                            onChange={(event) => handleInputChange('title', event?.target?.value)}
+                            placeholder='Test Title' className=' mt-1' />
+                    </div>
+                    <div className=' mt-5'>
+                        <label className=' text-gray-500'>DESCRIPTION/ACTION</label>
+                        <Textarea
+                            value={formTestCase?.description}
+                            onChange={(event) => handleInputChange('description', event?.target?.value)}
+                            placeholder='Description' className=' mt-1' />
+                    </div>
+                    <div className=' mt-5'>
+                        <label className=' text-gray-500'>TARGET ROUTE/PATH</label>
+                        <Input
+                            value={formTestCase?.targetRoute}
+                            onChange={(event) => handleInputChange('targetRoute', event?.target?.value)}
+                            placeholder='Target Route' className=' mt-1' />
+                    </div>
+                    <div className=' mt-5'>
+                        <label className=' text-gray-500'>EXPECTED RESULT</label>
+                        <Textarea
+                            value={formTestCase?.expectedResult}
+                            onChange={(event) => handleInputChange('expectedResult', event?.target?.value)}
+                            placeholder='Expected Result' className=' mt-1' />
+                    </div>
                 </div>
-                <div className=' mt-5'>
-                    <label className=' text-gray-500'>DESCRIPTION/ACTION</label>
-                    <Textarea
-                        value={formTestCase?.description}
-                        onChange={(event) => handleInputChange('description', event?.target?.value)}
-                        placeholder='Description' className=' mt-1' />
-                </div>
-                <div className=' mt-5'>
-                    <label className=' text-gray-500'>TARGET ROUTE/PATH</label>
-                    <Input
-                        value={formTestCase?.targetRoute}
-                        onChange={(event) => handleInputChange('targetRoute', event?.target?.value)}
-                        placeholder='Target Route' className=' mt-1' />
-                </div>
-                <div className=' mt-5'>
-                    <label className=' text-gray-500'>EXPECTED RESULT</label>
-                    <Textarea
-                        value={formTestCase?.expectedResult}
-                        onChange={(event) => handleInputChange('expectedResult', event?.target?.value)}
-                        placeholder='Expected Result' className=' mt-1' />
-                </div>
-            </div>
-            <DialogFooter>
-                <DialogClose><Button variant={'outline'}>Cancel</Button></DialogClose>
-                <Button onClick={updateCase}>Update Case</Button>
-            </DialogFooter>
-        </DialogContent>
-    </Dialog>
-)
+                <DialogFooter>
+                    <DialogClose><Button variant={'outline'}>Cancel</Button></DialogClose>
+                    <Button onClick={updateCase}>Update Case</Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    )
 }
 
 export default TestCaseSettingDialog
